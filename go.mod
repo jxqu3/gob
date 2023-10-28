@@ -1,4 +1,4 @@
-module m4te/gob
+module checkm4ted/gob
 
 go 1.21.3
 
