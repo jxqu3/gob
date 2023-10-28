@@ -1,4 +1,5 @@
-module github.com/checkm4ted/gob
+module github.com/checkm4ted/gob/v2
+
 
 go 1.21.3
 
