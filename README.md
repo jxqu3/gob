@@ -25,3 +25,6 @@ To build to a different platform in go, you have to set `GOOS` and `GOARCH` env 
 
 ### Why?
 To learn to make a CLI tool and save some minutes of my time in the future
+
+### Requirements:
+You need to have go installed as this tool is ***NOT A COMPILER***, it calls go build, this just facilitates the cross platform options
