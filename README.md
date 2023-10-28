@@ -20,8 +20,7 @@ To build to a different platform in go, you have to set `GOOS` and `GOARCH` env 
 `gob --os=linux`. If you don't specify the arch or OS it will use the current env values you have already set.
 
 ### Install:
-1. Download the latest release
-2. Put it in your path
+1. Run `go install github.com/checkm4ted/gob/v2@master`
 
 ### Why?
 To learn to make a CLI tool and save some minutes of my time in the future
