@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	exe "os/exec"
 	str "strings"
 
 	gk "github.com/jwalton/gchalk"
@@ -55,12 +56,8 @@ func ParseArgs() {
 }
 
 func main() {
-	fmt.Println(gk.WithGreen().Bold("GOB:") + " go cross-platform builder tool")
-	if len(os.Args) < 2 {
-		fmt.Println("Usage: gob --option=")
+	fmt.Println(gk.WithGreen().Bold("GOB:") + " go cross-platform builder tool (--help for options)")
 
-		return
-	}
 	ParseArgs()
 
 	if _, err := os.Open(inputFile); err != nil && inputFile != "." {
@@ -73,4 +70,13 @@ func main() {
 	fmt.Println(gk.Green("Output file: ") + out)
 	fmt.Println(gk.Green("Input File: ") + inputFile)
 
+	os.Setenv("GOOS", targetOs)
+	os.Setenv("GOARCH", targetArch)
+
+	fmt.Println(gk.Yellow("Building... "))
+	cmd := exe.Command("go", "build", "-o", out, inputFile)
+	if bytes, err := cmd.CombinedOutput(); err != nil {
+		fmt.Println(gk.Red("Building Error: ") + string(bytes) + "\n" + err.Error())
+		os.Exit(1)
+	}
 }

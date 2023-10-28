@@ -1,4 +1,4 @@
-module m4te/gobuild
+module m4te/gob
 
 go 1.21.3
 
