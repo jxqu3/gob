@@ -1,6 +1,5 @@
 module github.com/checkm4ted/gob/v2
 
-
 go 1.21.3
 
 require github.com/jwalton/gchalk v1.3.0

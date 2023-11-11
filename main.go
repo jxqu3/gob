@@ -15,6 +15,7 @@ var targetArch string = os.Getenv("GOARCH")
 var cgo bool = false
 var out string = ""
 var envs []string = []string{}
+var ldflags = ""
 
 var knownOS = map[string]bool{
 	"aix":       true,
@@ -82,6 +83,8 @@ func ParseArgs() {
 				--arch: set target platform CPU architecture
 				--out: set output file
 				--cgo: enable cgo
+				--light: sets -w and -s ldflags
+				--ldflags: set linker flags
 				--env: set other env vars
 				--list-os: list available OS
 				--list-arch: list available CPU architectures
@@ -103,6 +106,9 @@ func ParseArgs() {
 						fmt.Println(k)
 					}
 					os.Exit(0)
+				case "--light":
+					ldflags += "-w -s "
+					continue
 				}
 
 				PrintUsage()
@@ -130,6 +136,8 @@ func ParseArgs() {
 				out = value
 			case "env":
 				envs = str.Split(value, ",")
+			case "ldflags":
+				ldflags = value
 			default:
 				PrintUsage()
 			}
@@ -163,6 +171,7 @@ func main() {
 	fmt.Println(gk.Green("Input File: ") + inputFile)
 	fmt.Println(gk.Green("CGO: ") + fmt.Sprint(cgo))
 	fmt.Println(gk.Green("Envs: ") + fmt.Sprint(envs))
+	fmt.Println(gk.Green("ldflags: ") + ldflags)
 
 	os.Setenv("GOOS", targetOs)
 	os.Setenv("GOARCH", targetArch)
@@ -176,7 +185,7 @@ func main() {
 	}
 
 	fmt.Println(gk.Yellow("Building... "))
-	cmd := exe.Command("go", "build", "-o", out, inputFile)
+	cmd := exe.Command("go", "build", "-o", out, "-ldflags", ldflags, inputFile)
 	if bytes, err := cmd.CombinedOutput(); err != nil {
 		fmt.Println(gk.Red("Building Error: ") + string(bytes) + "\n" + err.Error())
 		os.Exit(1)
