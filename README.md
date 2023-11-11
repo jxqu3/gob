@@ -27,6 +27,9 @@ Commands:
     Example:
     gob --os=linux --arch=amd64 --out=linux_amd64 main.go
 ```
+
+Note: use --light AFTER --ldflags, else it won't be affected.
+
 If you just wanna build your project to the default platform, you can just do this:  
 `gob`  
 This  will execute `go build .` under the hood. 

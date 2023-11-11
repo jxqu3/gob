@@ -107,7 +107,7 @@ func ParseArgs() {
 					}
 					os.Exit(0)
 				case "--light":
-					ldflags += "-w -s "
+					ldflags += " -w -s"
 					continue
 				}
 
