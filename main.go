@@ -12,7 +12,9 @@ import (
 var inputFile string = "."
 var targetOs string = os.Getenv("GOOS")
 var targetArch string = os.Getenv("GOARCH")
+var cgo bool = false
 var out string = ""
+var envs []string = []string{}
 
 var knownOS = map[string]bool{
 	"aix":       true,
@@ -79,11 +81,16 @@ func ParseArgs() {
 				--os: set target platform OS
 				--arch: set target platform CPU architecture
 				--out: set output file
+				--cgo: enable cgo
+				--env: set other env vars
 				--list-os: list available OS
 				--list-arch: list available CPU architectures
 				Example:
 				gob --os=linux --arch=amd64 --out=linux_amd64 main.go`)
 					os.Exit(0)
+				case "--cgo":
+					cgo = true
+					continue
 				case "--list-os":
 					fmt.Println(gk.Green("Available OS:"))
 					for k := range knownOS {
@@ -121,6 +128,8 @@ func ParseArgs() {
 				targetArch = value
 			case "out":
 				out = value
+			case "env":
+				envs = str.Split(value, ",")
 			default:
 				PrintUsage()
 			}
@@ -152,9 +161,19 @@ func main() {
 	fmt.Println(gk.Green("Target Arch: ") + targetArch)
 	fmt.Println(gk.Green("Output file: ") + out)
 	fmt.Println(gk.Green("Input File: ") + inputFile)
+	fmt.Println(gk.Green("CGO: ") + fmt.Sprint(cgo))
+	fmt.Println(gk.Green("Envs: ") + fmt.Sprint(envs))
 
 	os.Setenv("GOOS", targetOs)
 	os.Setenv("GOARCH", targetArch)
+	if cgo {
+		os.Setenv("CGO_ENABLED", "1")
+	}
+
+	for _, e := range envs {
+		parts := str.SplitN(e, "=", 2)
+		os.Setenv(parts[0], parts[1])
+	}
 
 	fmt.Println(gk.Yellow("Building... "))
 	cmd := exe.Command("go", "build", "-o", out, inputFile)
