@@ -1,5 +1,10 @@
+# DEPRECATED
+This tool will no longer be maintained as I made a new one with all the functionality from this + a lot of new stuff and with much better cli support.
+https://github.com/checkm4ted/growl
+
 # gob: go cross-platform build tool
 What is `gob`? `gob` is a small (<2MB) cli tool to make it easier to cross-build in go. Instead of having to set your env variables every time, specially annoying in windows, you just do `gob --os=linux` or the target OS you want (as long as it is supported by the golang compiler)
+
 
 ### Features
 1. Easy cross compile without env variables
